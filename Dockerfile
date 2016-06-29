@@ -1,6 +1,6 @@
 FROM finalduty/docker-archlinux-base
 MAINTAINER FinalDuty <root@finalduty.me>
-#EXPOSE 53/udp
-#CMD /usr/bin/unbound; /bin/bash; 
+EXPOSE 80
+CMD /usr/bin/varnishd -j none -a 0.0.0.0:80 -f /etc/varnish/default.vcl; /bin/bash; 
 
-pacman -Sy --noconfirm varnish pound >/dev/null; pacman -Scc --noconfirm &>/dev/null
+RUN pacman -Sy --noconfirm varnish >/dev/null; pacman -Scc --noconfirm &>/dev/null
