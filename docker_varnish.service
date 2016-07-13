@@ -1,0 +1,17 @@
+[Unit]
+Description=Docker Container - Varnish Cache
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+TimeoutStartSec=0
+
+ExecStartPre=-/usr/bin/docker run -idt --name varnish -v /srv/docker/varnish:/etc/varnish -p 80:80 --link=check_mk --link=rancher-server finalduty/varnish
+ExecStart=/usr/bin/docker start -a saltstack
+
+ExecStop=/usr/bin/docker stop -t 2 saltstack
+ExecStopPost=-/usr/bin/docker rm -f saltstack
+
+[Install]
+WantedBy=multi-user.target
